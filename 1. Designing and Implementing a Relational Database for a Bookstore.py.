@@ -1,0 +1,58 @@
+# Question 1 
+# Task 1 
+
+import sqlite3
+
+# Connect to the database
+conn = sqlite3.connect('bookhaven.db')
+cursor = conn.cursor()
+
+# Create the Books table
+cursor.execute('''
+    CREATE TABLE Books (
+        book_id INTEGER PRIMARY KEY,
+        title TEXT,
+        author_id INTEGER,
+        genre TEXT,
+        publication_date DATE,
+        price REAL,
+        FOREIGN KEY (author_id) REFERENCES Authors(author_id)
+    )
+''')
+
+# Create the Authors table
+cursor.execute('''
+    CREATE TABLE Authors (
+        author_id INTEGER PRIMARY KEY,
+        author_name TEXT,
+        nationality TEXT,
+        birth_date DATE
+    )
+''')
+
+# Create the Customers table
+cursor.execute('''
+    CREATE TABLE Customers (
+        customer_id INTEGER PRIMARY KEY,
+        customer_name TEXT,
+        email TEXT,
+        phone_number TEXT
+    )
+''')
+
+# Create the Transactions table
+cursor.execute('''
+    CREATE TABLE Transactions (
+        transaction_id INTEGER PRIMARY KEY,
+        customer_id INTEGER,
+        book_id INTEGER,
+        transaction_date DATE,
+        quantity INTEGER,
+        FOREIGN KEY (customer_id) REFERENCES Customers(customer_id),
+        FOREIGN KEY (book_id) REFERENCES Books(book_id)
+    )
+''')
+
+# Commit the changes and close the connection
+conn.commit()
+conn.close()
